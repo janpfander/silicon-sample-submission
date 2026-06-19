@@ -1,0 +1,17 @@
+{
+  "team_id": "example-team",
+  "team_name": "Example Team (replace me)",
+  "contact": "name@institution.edu",
+  "tier": 1,
+  "entry": "primary",
+  "approach_family": "per-respondent simulation, single model",
+  "models": ["gpt-4o-mini-2024-07-18"],
+  "registration_doi": "10.5281/zenodo.XXXXXXX",
+  "disclosure_class": "A",
+  "escrow_doi": null,
+  "prediction_files": [
+    { "file": "predictions/example-team_T1_primary_v1.csv", "sha256": "d6695e1d8b2947cd58fccf80a27e9bee1e38a78ead6b6d646dbd7cfc4a59c965" }
+  ],
+  "coverage": { "interventions": 16, "outcomes": 13 },
+  "blinding_attestation": true
+}
