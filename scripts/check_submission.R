@@ -129,12 +129,19 @@ check_repo <- function(root = ".") {
   prof <- list.files(file.path(root, "profiles"), pattern = "\\.csv$")
   if (length(prof)) add("profiles/ custom profiles provided", "PASS", paste(prof, collapse = ", "))
 
+  is_example <- TRUE
   if (has("metadata.json")) {
     m <- tryCatch(fromJSON(file.path(root, "metadata.json")), error = function(e) NULL)
-    if (!is.null(m))
-      warn(!identical(m$team_id, "example-team"), "team_id set (not the example)",
-           "still 'example-team' — edit metadata.json before submitting")
+    if (!is.null(m)) {
+      is_example <- identical(m$team_id, "example")
+      warn(!is_example, "team_id set (not the example)",
+           "still 'example' — edit metadata.json before submitting")
+    }
   }
+  leftover <- list.files(file.path(root, "predictions"), pattern = "^example_.*\\.csv$")
+  if (!is_example && length(leftover))
+    warn(FALSE, "example files removed from predictions/",
+         paste("delete before depositing:", paste(leftover, collapse = ", ")))
 
   res <- bind_rows(res, .check_bundle(file.path(root, "metadata.json"), root))
   .finish(res, "metadata.json", root)

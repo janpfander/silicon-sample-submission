@@ -12,7 +12,7 @@ expect <- function(cond, msg) {
 
 ## ---- 1. Schema parity: clean_submission reproduces clean_common formulas ----
 cat("== parity ==\n")
-raw <- read_csv("examples/example_raw_T1.csv", show_col_types = FALSE)
+raw <- read_csv("survey/example_raw_export.csv", show_col_types = FALSE)
 cl  <- clean_submission(raw)
 
 # funding reverse-code
@@ -45,7 +45,7 @@ expect(all(clean_submission(rl)$gender == "Female"), "demographic label passthro
 cat("== validator: good submission ==\n")
 td <- file.path(tempdir(), "good"); dir.create(td, showWarnings = FALSE, recursive = TRUE)
 fn <- "vienna_T1_primary_v1.csv"
-write_csv(read_csv("predictions/example-team_T1_primary_v1.csv", show_col_types = FALSE), file.path(td, fn))
+write_csv(read_csv("predictions/example_T1_primary_v1.csv", show_col_types = FALSE), file.path(td, fn))
 meta <- list(team_id = "vienna", team_name = "WU Behavioral Clones Lab",
              contact = "name@institution.edu", tier = 1L, entry = "primary",
              approach_family = "per-respondent simulation, single model",
@@ -108,7 +108,7 @@ broke <- function(mutate_fn, label) {
   expect(any(r$status=="WARN" & grepl("trust_post in", r$check)), "out-of-range -> WARN") }
 # (f) inverted PI in Tier 3
 { bd <- file.path(tempdir(),"b_pi"); dir.create(bd, showWarnings=FALSE, recursive=TRUE)
-  t3 <- read_csv("examples/example_T3.csv", show_col_types=FALSE)
+  t3 <- read_csv("predictions/example_T3_primary_v1.csv", show_col_types=FALSE)
   t3$pi_lower[1] <- t3$pi_upper[1] + 10
   f3 <- "vienna_T3_primary_v1.csv"; write_csv(t3, file.path(bd,f3)); mm <- meta; mm$tier <- 3L
   mm$prediction_files <- list(list(file=f3, sha256=digest(file=file.path(bd,f3),algo="sha256")))

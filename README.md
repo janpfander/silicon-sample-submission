@@ -18,11 +18,14 @@ clone is already valid — run `make check` to see the green target state, then 
 3. **Produce your file(s):**
    - **Tier 1** (individual-level): run the survey, then clean your raw export →
      `make clean INPUT=your_raw_export.csv` (writes `predictions/<team_id>_T1_primary_v1.csv`).
-   - **Tier 2 / 3**: write the cell- or effect-level CSV(s) directly (see `examples/`).
+   - **Tier 2 / 3**: write the cell- or effect-level CSV(s) directly (see the matching `example_*`
+     file already in `predictions/`).
 4. **Edit `metadata.json`** (team, tier, models, disclosure class, …) and fill **`registration.md`**
    (the reporting checklist; ★ items must be public).
-5. **Check it:** `make check` — fix anything it flags until it passes.
-6. **Deposit:** release this repo to Zenodo and email the DOIs + SHA-256 hashes to the core team
+5. **Delete the examples:** `predictions/` ships with one `example_*` file per tier so you can see
+   each format. Before depositing, **remove every `example_*` file** and leave only your own.
+6. **Check it:** `make check` — fix anything it flags until it passes.
+7. **Deposit:** release this repo to Zenodo and email the DOIs + SHA-256 hashes to the core team
    **before the prediction lock (August 30, 2026)**.
 
 No `make`? Use `Rscript scripts/check.R` and `Rscript scripts/clean.R your_raw_export.csv`.
@@ -34,11 +37,10 @@ Requires R with `tidyverse`, `jsonlite`, `digest`.
 |---|---|
 | `metadata.json` | **edit** — machine-readable submission metadata |
 | `registration.md` | **edit** — GUIDE-LLM-extended reporting checklist |
-| `predictions/` | **edit** — your prediction file(s) (ships with the example) |
+| `predictions/` | **edit** — your prediction file(s); ships with one `example_*` per tier (delete them before depositing) |
 | `profiles/` | optional — drop your own `profiles.csv` here if you used custom profiles |
-| `survey/` | reference — `survey.qsf` (provided on invitation) + `questionnaire.txt` |
+| `survey/` | reference — `survey.qsf` (provided on invitation), `questionnaire.txt`, and `example_raw_export.csv` (a sample export to test `make clean`) |
 | `codebook.csv` | reference — every variable: Qualtrics label → target label, wording, outcome |
-| `examples/` | reference — example files for Tiers 1 (raw), 2, and 3 |
 | `scripts/` | the engine — do not edit |
 | `build/` | maintainer generators — you can ignore |
 
@@ -58,7 +60,8 @@ Requires R with `tidyverse`, `jsonlite`, `digest`.
 ```
 
 `team_id` must match `metadata.json`. Coverage: 16 interventions + control, 13 outcomes. The exact
-column schema for each tier is enforced by `make check` (see `examples/` and `scripts/submission_spec.R`).
+column schema for each tier is enforced by `make check` (see the `example_*` files in `predictions/`
+and `scripts/submission_spec.R`).
 
 ## The survey
 

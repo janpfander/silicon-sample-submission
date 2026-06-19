@@ -50,14 +50,15 @@ raw <- raw |>
   )
 for (v in slider_raw) raw[[v]] <- r_slider(N)
 
-dir.create("examples", showWarnings = FALSE)
 dir.create("predictions", showWarnings = FALSE)
-raw |> write_csv("examples/example_raw_T1.csv")
+dir.create("survey", showWarnings = FALSE)
+## An example raw Qualtrics export — the INPUT to `make clean`, not a submission.
+raw |> write_csv("survey/example_raw_export.csv")
 
 ## --- Tier 1: clean the raw export into the target schema -------------------
-## The cleaned Tier-1 example ships in predictions/ as the default submission.
+## One example submission per tier ships in predictions/, named example_* .
 t1 <- clean_submission(raw)
-write_csv(t1, "predictions/example-team_T1_primary_v1.csv")
+write_csv(t1, "predictions/example_T1_primary_v1.csv")
 
 ## --- Tier 2: cell-level statistics -----------------------------------------
 long <- t1 |>
@@ -78,7 +79,7 @@ summ <- function(df, ...) {
 t2_main <- long |> summ(condition, outcome) |>
   mutate(across(c(mean, sd), ~ round(.x, 3))) |>
   select(all_of(sst$tier2_main_cols))
-write_csv(t2_main, "examples/example_T2_cells_main.csv")
+write_csv(t2_main, "predictions/example_T2_primary_v1_cells_main.csv")
 
 t2_mod <- imap_dfr(sst$moderators, function(levels, m) {
   long |>
@@ -88,7 +89,7 @@ t2_mod <- imap_dfr(sst$moderators, function(levels, m) {
 }) |>
   mutate(across(c(mean, sd), ~ round(.x, 3))) |>
   select(all_of(sst$tier2_mod_cols))
-write_csv(t2_mod, "examples/example_T2_cells_moderator.csv")
+write_csv(t2_mod, "predictions/example_T2_primary_v1_cells_moderator.csv")
 
 ## --- Tier 3: effect-level (ATE vs control + a 95% prediction interval) ------
 ctrl <- t2_main |> filter(condition == "control") |>
@@ -110,8 +111,11 @@ t3 <- t2_main |>
     ate      = round(ate, 3)
   ) |>
   select(all_of(sst$tier3_cols))
-write_csv(t3, "examples/example_T3.csv")
+write_csv(t3, "predictions/example_T3_primary_v1.csv")
 
 cat("Examples written:\n",
-    " predictions/example-team_T1_primary_v1.csv —", nrow(t1), "rows,", nlevels(t1$condition), "conditions\n",
-    " examples/ : raw_T1, T2 main (", nrow(t2_main), "), T2 moderator (", nrow(t2_mod), "), T3 (", nrow(t3), ")\n")
+    " survey/example_raw_export.csv — raw input for `make clean`\n",
+    " predictions/example_T1_primary_v1.csv —", nrow(t1), "rows,", nlevels(t1$condition), "conditions\n",
+    " predictions/example_T2_primary_v1_cells_main.csv —", nrow(t2_main), "rows\n",
+    " predictions/example_T2_primary_v1_cells_moderator.csv —", nrow(t2_mod), "rows\n",
+    " predictions/example_T3_primary_v1.csv —", nrow(t3), "rows\n")
