@@ -127,8 +127,6 @@ check_repo <- function(root = ".") {
     blank <- sum(grepl("\\*\\* [—-] .*:\\s*$", readLines(file.path(root, "registration.md"), warn = FALSE)))
     warn(blank == 0, "registration.md filled in", paste(blank, "checklist item(s) still blank"))
   }
-  prof <- list.files(file.path(root, "profiles"), pattern = "\\.csv$")
-  if (length(prof)) add("profiles/ custom profiles provided", "PASS", paste(prof, collapse = ", "))
 
   is_example <- TRUE
   if (has("metadata.json")) {
