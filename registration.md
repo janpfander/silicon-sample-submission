@@ -51,7 +51,7 @@ sections (B) once per model. See the call's *Disclosure policy* for escrow rules
 
 ## E · Validation & post-processing
 - **E.1 Human validation** — any human review of outputs (often N/A):
-- **E.2 Post-processing** — parsing rules; handling of refusals/malformed/missing/out-of-range; exclusions; effective N per condition:
+- **E.2 Post-processing** — parsing rules; handling of refusals/malformed/missing/out-of-range; exclusions; for approaches that generate individual responses, the resulting effective N per condition (descriptive disclosure, not a scoring input):
 - **E.3 Calibration corrections** — any post-hoc scaling/shifting/debiasing and exactly what data it was fit on (cross-ref F/G):
 
 ## F · Learning and conditioning components

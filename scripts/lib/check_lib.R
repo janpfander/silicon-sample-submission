@@ -204,10 +204,14 @@ check_repo <- function(root = ".") {
     ok(length(setdiff(unique(as.character(d$condition)), sst$conditions)) == 0,
        paste0("condition labels valid: ", f),
        paste("unknown:", paste(setdiff(unique(as.character(d$condition)), sst$conditions), collapse = ", ")))
-  if ("sd" %in% names(d))
-    warn(rng(d$sd, 0, Inf) == 0, paste0("sd >= 0: ", f), "negative sd present")
-  if ("n_eff" %in% names(d))
-    warn(all(d$n_eff == floor(d$n_eff), na.rm = TRUE), paste0("n_eff integer: ", f), "non-integer n_eff")
+  if (all(c("pi_lower", "pi_upper") %in% names(d)))
+    ok(all(d$pi_lower <= d$pi_upper, na.rm = TRUE), paste0("pi_lower <= pi_upper: ", f),
+       paste(sum(d$pi_lower > d$pi_upper, na.rm = TRUE), "row(s) inverted"))
+  if (all(c("pi_lower", "mean", "pi_upper") %in% names(d)))
+    warn(all(d$pi_lower <= d$mean & d$mean <= d$pi_upper, na.rm = TRUE),
+         paste0("mean within prediction interval: ", f),
+         paste(sum(!(d$pi_lower <= d$mean & d$mean <= d$pi_upper), na.rm = TRUE),
+               "row(s) with mean outside [pi_lower, pi_upper]"))
 }
 
 .check_t2_main <- function(d, f, add, ok, warn, rng) {

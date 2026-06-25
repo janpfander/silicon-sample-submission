@@ -86,9 +86,9 @@ sst <- local({
     "donation_ams", "newsletter_signup"
   )
 
-  tier2_main_cols <- c("condition", "outcome", "mean", "sd", "n_eff")
+  tier2_main_cols <- c("condition", "outcome", "mean", "pi_lower", "pi_upper")
   tier2_mod_cols  <- c("condition", "moderator", "moderator_level",
-                       "outcome", "mean", "sd", "n_eff")
+                       "outcome", "mean", "pi_lower", "pi_upper")
   tier3_cols      <- c("condition", "outcome", "ate", "pi_lower", "pi_upper")
 
   list(
